@@ -7,9 +7,7 @@ import os
 
 from vmrunner import vmrunner
 
-image_name="build/service"
-if len(sys.argv) > 1:
-    image_name=str(sys.argv[1])
+image_name = str(sys.argv[1]) if len(sys.argv) > 1 else "build/service"
 
 def test2():
   print("Booting VM 2 - lots of memory")

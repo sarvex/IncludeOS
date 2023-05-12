@@ -29,12 +29,14 @@ class ChainloaderConan(ConanFile):
         self.info.requires.major_mode()
 
     def build_requirements(self):
-        self.build_requires("includeos/[>=0.14.0,include_prerelease=True]@{}/{}".format(self.user,self.channel))
+        self.build_requires(
+            f"includeos/[>=0.14.0,include_prerelease=True]@{self.user}/{self.channel}"
+        )
         self.build_requires("vmbuild/0.15.0@includeos/stable")
 
     def _configure_cmake(self):
         cmake = CMake(self)
-        cmake.configure(source_folder=self.source_folder+"/src/chainload")
+        cmake.configure(source_folder=f"{self.source_folder}/src/chainload")
         return cmake
 
     def build(self):
@@ -42,7 +44,7 @@ class ChainloaderConan(ConanFile):
         cmake.build()
 
     def package_info(self):
-        self.env_info.INCLUDEOS_CHAINLOADER=self.package_folder+"/bin"
+        self.env_info.INCLUDEOS_CHAINLOADER = f"{self.package_folder}/bin"
 
     def package(self):
         cmake=self._configure_cmake()

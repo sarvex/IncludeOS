@@ -21,11 +21,11 @@ def check_exit(line, n = "0"):
 
     if as_expected:
         print(color.INFO("test.py"), "Exit status is ", status, "as expected")
-        vm.exit(0, "Test " + str(T) + "/" + str(N) + " passed", keep_running = True)
-        return as_expected
+        vm.exit(0, f"Test {T}/{str(N)} passed", keep_running = True)
     else:
         print(color.WARNING("test.py"), "Exit status is", status, "expected", n)
-        return as_expected
+
+    return as_expected
 
 def exit1(line):
     return check_exit(line, "200")

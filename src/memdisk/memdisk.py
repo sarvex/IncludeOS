@@ -19,7 +19,7 @@ f.write("USE32\nALIGN 4096\n")
 f.write("section .diskdata\n")
 if args.disk:
   # write image and close disk
-  f.write('   incbin "' + args.disk + '"\n')
+  f.write(f'   incbin "{args.disk}' + '"\n')
   f.close()
   # if a folder is specified, lets assume the disk is
   # to be created from the contents of a folder:
@@ -27,15 +27,15 @@ if args.disk:
     image = args.disk
 
     if _platform == "darwin":
-      osx_dmg = args.disk + ".dmg"
+      osx_dmg = f"{args.disk}.dmg"
       call(["hdiutil", "create", "-fs", "MS-DOS", "-o", args.disk, "-srcfolder", args.folder])
-      print ("Renaming " + osx_dmg + " => " + image)
+      print(f"Renaming {osx_dmg} => {image}")
       call(["mv", osx_dmg, image])
 
     else:
       print ("Using folder: \t" + args.folder + "\nImage name: \t" + image)
       sectors = 16500 # Minimum for FAT16 (otherwise its formatted as FAT12)
-      call(["dd", "if=/dev/zero", "of=" + args.disk, "count=" + str(sectors)])
+      call(["dd", "if=/dev/zero", f"of={args.disk}", f"count={sectors}"])
       call(["mkfs.fat", image])
 
     exit(0)

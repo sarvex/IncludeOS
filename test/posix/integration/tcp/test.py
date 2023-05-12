@@ -46,8 +46,7 @@ HOST, PORT = '10.0.0.57', 1042
 RECEIVED = ''
 
 def verify_recv(recv):
-  ok = recv == S_MESSAGE
-  return ok
+    return recv == S_MESSAGE
 
 def TCP_connect():
   sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

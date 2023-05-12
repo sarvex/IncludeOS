@@ -23,10 +23,7 @@ def start_icmp_test(trigger_line):
   # 1 Ping: Checking output from callback in service.cpp
   print(color.INFO("<Test.py>"), "Performing ping6 test")
 
-  output_data = ""
-  for x in range(0, 9):
-    output_data += vm.readline()
-
+  output_data = "".join(vm.readline() for _ in range(0, 9))
   print(output_data)
 
   if "Received packet from gateway" in output_data and \

@@ -42,10 +42,7 @@ def start_icmp_test(trigger_line):
   # 1 Ping: Checking output from callback in service.cpp
   print(color.INFO("<Test.py>"), "Performing ping test")
 
-  output_data = ""
-  for x in range(0, 11):
-    output_data += vm.readline()
-
+  output_data = "".join(vm.readline() for _ in range(0, 11))
   print(output_data)
 
   if "Received packet from gateway" in output_data and \
@@ -95,7 +92,7 @@ def start_icmp_test(trigger_line):
     vm.exit(0, "<Test.py> All ICMP tests succeeded. Process returned 0 exit status")
   else:
     num_fails = 3 - num_successes
-    res = "<Test.py> " + str(num_fails) + " ICMP test(s) failed"
+    res = f"<Test.py> {str(num_fails)} ICMP test(s) failed"
     vm.exit(1, res)
 
 vm.on_output("Service IP address is 10.0.0.45", start_icmp_test);

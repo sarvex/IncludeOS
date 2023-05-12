@@ -30,7 +30,11 @@ def DHCP_test(trigger_line):
     command = ["ping", "-c", str(ping_count), "-i", "0.2", ip_string.rstrip()]
     print(color.DATA(" ".join(command)))
     print(subprocess.check_output(command, timeout=thread_timeout))
-    print(color.INFO("<Test.py>"), "Number of ping tests passed: ", str(num_assigned_clients))
+    print(
+        color.INFO("<Test.py>"),
+        "Number of ping tests passed: ",
+        num_assigned_clients,
+    )
     if num_assigned_clients == 3:
       vm.exit(0,"<Test.py> Ping test for all 3 clients passed. Process returned 0 exit status")
   except Exception as e:

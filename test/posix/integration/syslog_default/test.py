@@ -103,7 +103,7 @@ vm.on_output(" Syslogd Critical after cleared prepended message", increment)
 vm.on_output(" Open after close prepended message: " +
   "Syslogd Info after openlog with both m: No error information and two hex arguments: 0x64 and 0x32", increment)
 
-vm.on_output("<191> " + DEBUG_C + "<LOCAL7.DEBUG> " + END_C, increment)
+vm.on_output(f"<191> {DEBUG_C}<LOCAL7.DEBUG> {END_C}", increment)
 vm.on_output(" Exiting test: Something special to close with", check_num_outputs)
 
 # Boot the VM, taking a timeout as parameter

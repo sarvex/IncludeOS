@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import sys
 outfile = sys.argv[1]
-print(outfile + " is being processed...")
+print(f"{outfile} is being processed...")
 
 list = ()
 with open("remove.txt", "r") as f:

@@ -14,7 +14,7 @@ disks = ["memdisk", "virtio1", "virtio2"]
 # Remove all data disk images
 def cleanup():
     for disk in disks:
-        diskname = disk + ".disk"
+        diskname = f"{disk}.disk"
         print("Removing disk file ", diskname)
         subprocess.check_call(["rm", "-f", diskname], timeout=thread_timeout)
 

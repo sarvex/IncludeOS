@@ -26,24 +26,24 @@ def UDP_test():
   sock.sendto(data, (HOST, PORT))
   received = sock.recv(1024)
 
-  print("<Test.py> Sent:     {}".format(data))
-  print("<Test.py> Received: {}".format(received))
+  print(f"<Test.py> Sent:     {data}")
+  print(f"<Test.py> Received: {received}")
   if received != data: return False
 
   data = "Luke".encode()
   sock.sendto(data, (HOST, PORT))
   received = sock.recv(1024)
 
-  print("<Test.py> Sent:     {}".format(data))
-  print("<Test.py> Received: {}".format(received))
+  print(f"<Test.py> Sent:     {data}")
+  print(f"<Test.py> Received: {received}")
   if received != data: return False
 
   data = "x".encode() * 1472
   sock.sendto(data, (HOST, PORT))
   received = sock.recv(1500)
   if received != data:
-      print("<Test.py> Did not receive long string: {}".format(received))
-      return False
+    print(f"<Test.py> Did not receive long string: {received}")
+    return False
 
   data = "x".encode() * 9216 # 9216 is apparently default max for MacOS
   sock.sendto(data, (HOST, PORT))
@@ -75,24 +75,24 @@ def UDP6_test(trigger_line):
   sock.sendto(data, addr)
   received = sock.recv(1024)
 
-  print("<Test.py> Sent:     {}".format(data))
-  print("<Test.py> Received: {}".format(received))
+  print(f"<Test.py> Sent:     {data}")
+  print(f"<Test.py> Received: {received}")
   if received != data: return False
 
   data = "Luke".encode()
   sock.sendto(data, addr)
   received = sock.recv(1024)
 
-  print("<Test.py> Sent:     {}".format(data))
-  print("<Test.py> Received: {}".format(received))
+  print(f"<Test.py> Sent:     {data}")
+  print(f"<Test.py> Received: {received}")
   if received != data: return False
 
   data = "x".encode() * 1448
   sock.sendto(data, addr)
   received = sock.recv(1500)
   if received != data:
-      print("<Test.py> Did not receive long string: {}".format(received))
-      return False
+    print(f"<Test.py> Did not receive long string: {received}")
+    return False
 
   UDP_test()
 

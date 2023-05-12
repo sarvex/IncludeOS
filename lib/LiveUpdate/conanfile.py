@@ -25,7 +25,9 @@ class LiveupdateConan(ConanFile):
         self.info.requires.major_mode()
 
     def requirements(self):
-        self.requires("includeos/[>=0.14.0,include_prerelease=True]@{}/{}".format(self.user,self.channel))
+        self.requires(
+            f"includeos/[>=0.14.0,include_prerelease=True]@{self.user}/{self.channel}"
+        )
         self.requires("s2n/0.8@includeos/stable")
 
     def build_requirements(self):
@@ -41,7 +43,7 @@ class LiveupdateConan(ConanFile):
     def _cmake_configure(self):
         cmake = CMake(self)
         cmake.definitions['ARCH']=self._arch()
-        cmake.configure(source_folder=self.source_folder+"/lib/LiveUpdate")
+        cmake.configure(source_folder=f"{self.source_folder}/lib/LiveUpdate")
         return cmake
 
     def build(self):

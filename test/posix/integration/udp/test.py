@@ -59,16 +59,16 @@ def verify_recv(trigger_line):
   return ok
 
 def UDP_send_much(trigger_line):
-  MESSAGE = "Message #"
-  sock = socket.socket
-  sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    MESSAGE = "Message #"
+    sock = socket.socket
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-  sock.connect((HOST, PORT))
+    sock.connect((HOST, PORT))
 
-  for i in range(0, 5):
-    msg = str.encode(MESSAGE + repr(i))
-    sock.send(msg)
-    print("Sending {}".format(msg))
+    for i in range(0, 5):
+        msg = str.encode(MESSAGE + repr(i))
+        sock.send(msg)
+        print(f"Sending {msg}")
 
 import _thread
 _thread.start_new_thread(UDP_recv, ())

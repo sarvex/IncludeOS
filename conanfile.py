@@ -37,21 +37,21 @@ class IncludeOSConan(ConanFile):
     no_copy_source=True
     def requirements(self):
         self.requires("GSL/2.0.0@includeos/stable")
-        if not self.options.platform == "userspace":
+        if self.options.platform != "userspace":
             self.requires("libcxx/[>=5.0]@includeos/stable")
             self.requires("libgcc/1.0@includeos/stable")
 
         if self.settings.arch == "armv8":
             self.requires("libfdt/1.4.7@includeos/stable")
 
-        if not self.options.platform == 'nano':
+        if self.options.platform != 'nano':
             self.requires("rapidjson/1.1.0@includeos/stable")
             self.requires("http-parser/2.8.1@includeos/stable")
             self.requires("uzlib/v2.1.1@includeos/stable")
             self.requires("botan/2.8.0@includeos/stable")
             self.requires("s2n/0.8@includeos/stable")
 
-        if self.options.platform == 'solo5-hvt' or self.options.platform == 'solo5-spt':
+        if self.options.platform in ['solo5-hvt', 'solo5-spt']:
             if self.settings.compiler != 'gcc' or self.settings.arch == "x86":
                 raise ConanInvalidConfiguration("solo5 is only supported with gcc")
             self.requires("solo5/0.4.1@includeos/stable")
@@ -59,9 +59,9 @@ class IncludeOSConan(ConanFile):
     def configure(self):
         if self.options.platform == 'solo5-hvt':
             self.options["solo5"].tenders='hvt'
-        if self.options.platform == 'solo5-spt':
+        elif self.options.platform == 'solo5-spt':
             self.options["solo5"].tenders='spt'
-        if self.options.platform == 'userspace':
+        elif self.options.platform == 'userspace':
             self.options["s2n"].includeos=False
 
         del self.settings.compiler.libcxx
@@ -101,15 +101,19 @@ class IncludeOSConan(ConanFile):
         self.cpp_info.includedirs=['include/os']
 
         platform = {
-            'default' : '{}_pc'.format(self._target_arch()),
-            'nano' : '{}_nano'.format(self._target_arch()),
-            'solo5-hvt' : '{}_solo5-hvt'.format(self._target_arch()),
-            'solo5-spt' : '{}_solo5-spt'.format(self._target_arch()),
-            'userspace' : '{}_userspace'.format(self._target_arch())
+            'default': f'{self._target_arch()}_pc',
+            'nano': f'{self._target_arch()}_nano',
+            'solo5-hvt': f'{self._target_arch()}_solo5-hvt',
+            'solo5-spt': f'{self._target_arch()}_solo5-spt',
+            'userspace': f'{self._target_arch()}_userspace',
         }
 
-        self.cpp_info.libs=['os','arch','musl_syscalls']
-        self.cpp_info.libs.append(platform.get(str(self.options.platform),"NONE"))
+        self.cpp_info.libs = [
+            'os',
+            'arch',
+            'musl_syscalls',
+            platform.get(str(self.options.platform), "NONE"),
+        ]
         self.cpp_info.libdirs = [ 'lib', 'platform' ]
 
     def deploy(self):

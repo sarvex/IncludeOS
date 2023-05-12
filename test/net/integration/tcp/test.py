@@ -26,7 +26,7 @@ def connect(port):
     res = socket.getaddrinfo(addr[0], addr[1], socket.AF_INET6, socket.SOCK_STREAM, socket.SOL_TCP)
     af, socktype, proto, canonname, sa = res[0]
     sock = socket.socket(af, socktype, proto)
-    print(INFO, 'connecting to %s' % res)
+    print(INFO, f'connecting to {res}')
     sock.connect(sa)
     bytes_received = 0
     try:
@@ -39,7 +39,7 @@ def connect(port):
             else:
                 break
     finally:
-        print(INFO, 'closing socket. Received ', str(bytes_received),"bytes")
+        print(INFO, 'closing socket. Received ', bytes_received, "bytes")
         sock.close()
 
     return True
@@ -47,7 +47,7 @@ def connect(port):
 def listen(port):
     addr = (HOST, port)
     res = socket.getaddrinfo(addr[0], addr[1], socket.AF_INET6, socket.SOCK_STREAM, socket.SOL_TCP)
-    print(INFO, 'starting up on %s' % res)
+    print(INFO, f'starting up on {res}')
     af, socktype, proto, canonname, sa = res[0]
     sock = socket.socket(af, socktype, proto)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -59,8 +59,7 @@ def listen(port):
         try:
             print(INFO, 'connection from', client_address)
             while True:
-                data = connection.recv(1024)
-                if data:
+                if data := connection.recv(1024):
                     print(INFO,'received data, sending data back to the client')
                     connection.sendall(data)
                     print(INFO,'close connection to client')

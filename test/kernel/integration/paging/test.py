@@ -73,8 +73,10 @@ def done(line):
         others == expected_others):
         vm.exit(0, "All tests passed")
     else:
-        vm.exit(1, "Expected " + str(expected_cases())
-                + " cases recorded " + str(recorded_cases()))
+        vm.exit(
+            1,
+            f"Expected {str(expected_cases())} cases recorded {str(recorded_cases())}",
+        )
 
 
 vm.on_output("#include<os> // Literally", booted);

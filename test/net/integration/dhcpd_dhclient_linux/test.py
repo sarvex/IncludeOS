@@ -35,10 +35,10 @@ def check_dhclient_output(output):
   global num_messages
   global assigned_ip
 
-  ip_length = 13
   ip_index = output.find("10.200.100.")
 
   if ip_index != -1:
+    ip_length = 13
     assigned_ip = output[ip_index : ip_index + ip_length]
   else:
     cleanup()
@@ -47,13 +47,14 @@ def check_dhclient_output(output):
   if "DHCPDISCOVER on bridge43 to 255.255.255.255 port 67" in output:
     num_messages += 1
 
-  if "DHCPOFFER of " + assigned_ip + " from 10.200.0.1" in output:
+  if f"DHCPOFFER of {assigned_ip} from 10.200.0.1" in output:
     num_messages += 1
 
-  if "DHCPREQUEST of " + assigned_ip + " on bridge43 to 255.255.255.255 port 67" in output:
+  if (f"DHCPREQUEST of {assigned_ip} on bridge43 to 255.255.255.255 port 67"
+      in output):
     num_messages += 1
 
-  if "DHCPACK of " + assigned_ip + " from 10.200.0.1" in output:
+  if f"DHCPACK of {assigned_ip} from 10.200.0.1" in output:
     num_messages += 1
 
   if num_messages != 4:

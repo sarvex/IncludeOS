@@ -16,11 +16,11 @@ import http.server
 
 DO_SERVE = True
 class RequestHandler(http.server.BaseHTTPRequestHandler):
-    def do_GET(s):
-        s.send_response(200)
-        s.send_header("Content-type", "text/plain; charset=utf-8",)
-        s.end_headers()
-        s.wfile.write(s.path.encode("utf-8"))
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header("Content-type", "text/plain; charset=utf-8")
+        self.end_headers()
+        self.wfile.write(self.path.encode("utf-8"))
 
 
 def Client_test():

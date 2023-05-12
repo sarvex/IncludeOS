@@ -14,7 +14,7 @@ from vmrunner import vmrunner
 from vmrunner.prettify import color
 
 test_name="Stresstest"
-name_tag = "<" + test_name + ">"
+name_tag = f"<{test_name}>"
 
 # We assume malloc will increase / decrease heap pagewise
 PAGE_SIZE = 4096
@@ -45,7 +45,7 @@ sock_mem = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 heap_verified = False
 
 def get_mem():
-  name_tag = "<" + test_name + "::get_mem>"
+  name_tag = f"<{test_name}::get_mem>"
 
   try:
     # We expect this socket to allready be opened
@@ -67,7 +67,7 @@ def get_mem_start():
   return memuse_at_start
 
 def memory_increase(lead_time, expected_memuse = memuse_at_start):
-  name_tag = "<" + test_name + "::memory_increase>"
+  name_tag = f"<{test_name}::memory_increase>"
   if lead_time:
     print(color.INFO(name_tag),"Checking for memory increase after a lead time of ",lead_time,"s.")
     # Give the VM a chance to free up resources before asking
@@ -75,15 +75,12 @@ def memory_increase(lead_time, expected_memuse = memuse_at_start):
 
   use = get_mem()
   increase = use - expected_memuse
-  percent = 0.0;
-  if (increase):
-    percent = float(increase) / expected_memuse
-
+  percent = float(increase) / expected_memuse if increase else 0.0
   if increase > acceptable_increase:
     print(color.WARNING(name_tag), "Memory increased by ", percent, "%.")
     print("(" , expected_memuse, "->", use, ",", increase,"b increase, but no increase expected.)")
   else:
-    print(color.OK(name_tag + "Memory constant, no leak detected"))
+    print(color.OK(f"{name_tag}Memory constant, no leak detected"))
   return increase
 
 # Fire a single burst of UDP packets
@@ -99,7 +96,7 @@ def UDP_burst(burst_size = BURST_SIZE, burst_interval = BURST_INTERVAL):
   data = "UDP is working as it's supposed to."
 
   try:
-    for i in range(0, burst_size):
+    for _ in range(0, burst_size):
       sock.sendto(data, (HOST, PORT_FLOOD))
   except Exception as e:
     print(color.WARNING("<Test.py> Python socket timed out while sending. "))
@@ -144,8 +141,8 @@ def crash_test(string):
   sock_mem.connect((HOST, PORT_MEM))
   mem_before = get_mem_start()
   if mem_before <= 0:
-      print(color.FAIL("Initial memory reported as " + str(mem_before)))
-      return False
+    print(color.FAIL(f"Initial memory reported as {str(mem_before)}"))
+    return False
 
   if not heap_verified:
       print(color.FAIL("Heap behavior was not verified as expected. "))
@@ -165,8 +162,8 @@ def crash_test(string):
 
 # Fire several bursts, e.g. trigger a function that fires bursts, several times
 def fire_bursts(func, sub_test_name, lead_out = 3):
-  name_tag = "<" + sub_test_name + ">"
-  print(color.HEADER(test_name + " initiating "+sub_test_name))
+  name_tag = f"<{sub_test_name}>"
+  print(color.HEADER(f"{test_name} initiating {sub_test_name}"))
   membase_start = get_mem()
   mem_base = membase_start
 
@@ -202,9 +199,9 @@ def fire_bursts(func, sub_test_name, lead_out = 3):
   print(color.INFO(name_tag),"Heap behavior: ", "+",increases, ", -",decreases, ", ==", constant)
   print(color.INFO(name_tag),"Done. Checking for liveliness")
   if memory_increase(lead_out, membase_start) > acceptable_increase:
-    print(color.FAIL(sub_test_name + " failed "))
+    print(color.FAIL(f"{sub_test_name} failed "))
     return False
-  print(color.PASS(sub_test_name + " succeeded "))
+  print(color.PASS(f"{sub_test_name} succeeded "))
   return True
 
 
@@ -249,10 +246,7 @@ def wait_for_tw():
   while time_wait_proc > socket_limit:
     output = subprocess.check_output(('netstat', '-anlt')).decode("utf-8")
     output = output.split('\n')
-    time_wait_proc = 0
-    for line in output:
-        if "TIME_WAIT" in line:
-            time_wait_proc += 1
+    time_wait_proc = sum(1 for line in output if "TIME_WAIT" in line)
     print(color.INFO("There are {0} sockets in use, waiting for value to drop below {1}".format(time_wait_proc, socket_limit)))
     time.sleep(7)
 
@@ -272,7 +266,7 @@ if len(sys.argv) > 3:
   BURST_COUNT = int(sys.argv[2])
   BURST_SIZE = int(sys.argv[3])
 
-print(color.HEADER(test_name + " initializing"))
+print(color.HEADER(f"{test_name} initializing"))
 print(color.INFO(name_tag),"configured for ", BURST_COUNT,"bursts of", BURST_SIZE, "packets each")
 
 if len(sys.argv) > 4:

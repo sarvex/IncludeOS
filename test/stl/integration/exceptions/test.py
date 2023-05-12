@@ -19,10 +19,7 @@ def test_ok(line):
 
 def expected_panic(line):
     print("<test.py> VM panicked")
-    if (tests_ok == 1):
-        return True
-    else:
-        return False
+    return tests_ok == 1
 
 def test_fail(line):
     print("Test didn't get expected panic output before end of backtrace")
